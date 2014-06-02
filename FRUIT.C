@@ -1,21 +1,4 @@
-#include <stdio.h>
-#include <graphics.h>
-#include <stddef.h>
-#include <dos.h>
-#include <alloc.h>
-#include <conio.h>
-#include <math.h>
-#include <stdlib.h>
-#define PI 3.14159265
-#define CENTERX 320
-#define CENTERY 400
-#define RADIUS  30
-#define BACKCOLOR 1
-#define FRONTCOLOR 6
-int count;
-int mousex,mousey,mousekey;
-void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum);
-void mouseRead();
+#include "Fruit_Ninja"
 int main()
 {
 	int i,graphdriver,graphmode,fruitnum,num;
@@ -202,4 +185,38 @@ void mouseRead()
 	mousex = r2.x.cx;
 	mousey = r2.x.dx;
 	mousekey = r2.x.bx;
+}
+
+void clearscreen()
+{
+	setfillstyle(SOLID_FILL,BROWN);
+	bar(150,60,480,90);
+    
+}
+
+/********************************************************** 
+ *  函数原型：void outch(double sum)   	*
+ *  传入参数：sum-待输出的双精度浮点数                               	*
+ *  返 回 值：无                            	*
+ *  函数功能：在信息显示框中输出sum的值	*
+ **********************************************************/
+void outch() 
+{
+	int i=0,m=0,j=0,fig;
+	char FIG[8];
+	char temp[2]="";
+	long int xu;
+	xu = count * 100;
+	clearscreen()
+	outtextxy(OUTX-10,OUTY,"当前得分：");
+	while(xu!=0)
+	{
+		FIG[i++]=xu%10+'0';
+		xu=floor(xu/10);
+	}
+	for(fig=0;fig<i;fig++)
+	{
+		temp[0]=FIG[fig];
+		outtextxy(OUTX-15*(fig+1),OUTY,temp);
+	}
 }
