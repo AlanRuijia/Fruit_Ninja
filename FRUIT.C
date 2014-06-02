@@ -11,6 +11,7 @@
 #define CENTERY 400
 #define RADIUS  30
 #define BACKCOLOR 1
+#define FRONTCOLOR 6
 int count;
 int mousex,mousey,mousekey;
 void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum);
@@ -26,14 +27,14 @@ int main()
 	setpalette(1,1);
 	setpalette(4,4);
 	setpalette(0,0);
-	setcolor(3);
+	setcolor(FRONTCOLOR);
 	cleardevice();
 	setbkcolor(BACKCOLOR);
 	setlinestyle(0,0,1);
-	setfillstyle(1,4);
+	setfillstyle(1,5);
 	/*Next part is about to draw an intact fruit.*/
 	circle(CENTERX,CENTERY,RADIUS);
-	floodfill(CENTERX,CENTERY,3);
+	floodfill(CENTERX,CENTERY,FRONTCOLOR);
 	setlinestyle(0,0,3);
 	line(CENTERX,CENTERY-24,CENTERX,CENTERY-40);
 	setlinestyle(0,0,1);
@@ -45,7 +46,7 @@ int main()
 	line( CENTERX+21, CENTERY+21, CENTERX-21, CENTERY-21);
 	anglef = 135;
 	arc(CENTERX, CENTERY, anglef, anglef+180,RADIUS);
-	floodfill(CENTERX-10,CENTERY,3);
+	floodfill(CENTERX-10,CENTERY,FRONTCOLOR);
     memorysize = imagesize(280,340,360,440);
 	bufferapartl = malloc(memorysize);
 	getimage(280,340,360,440,bufferapartl);
@@ -54,7 +55,7 @@ int main()
 	line( CENTERX-21, CENTERY+21, CENTERX+21, CENTERY-21);
 	angles = 225;
 	arc(CENTERX, CENTERY, angles, angles-180,RADIUS);
-	floodfill(CENTERX+10,CENTERY,3);
+	floodfill(CENTERX+10,CENTERY,FRONTCOLOR);
     memorysize = imagesize(280,340,360,440);
 	bufferapartr = malloc(memorysize);
 	getimage(280,340,360,440,bufferapartr);
@@ -202,4 +203,3 @@ void mouseRead()
 	mousey = r2.x.dx;
 	mousekey = r2.x.bx;
 }
-
