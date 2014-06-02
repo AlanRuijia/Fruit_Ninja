@@ -31,7 +31,7 @@ int main()
 	cleardevice();
 	setbkcolor(BACKCOLOR);
 	setlinestyle(0,0,1);
-	setfillstyle(1,5);
+	setfillstyle(1,4);
 	/*Next part is about to draw an intact fruit.*/
 	circle(CENTERX,CENTERY,RADIUS);
 	floodfill(CENTERX,CENTERY,FRONTCOLOR);
