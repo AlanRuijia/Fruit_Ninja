@@ -11,14 +11,9 @@
 #define CENTERY 400
 #define RADIUS  30
 #define BACKCOLOR 1
-extern int count;
+int count;
 int mousex,mousey,mousekey;
-/*void cursorOn();
-void cursorOff();
-void cursorSet(unsigned long x, unsigned long y);
-void mouseRead();*/
 void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum);
-void fruitdownapart(double x,double y, double speed, void *bufferapartl, void *bufferapartr);
 void mouseRead();
 int main()
 {
@@ -51,23 +46,23 @@ int main()
 	anglef = 135;
 	arc(CENTERX, CENTERY, anglef, anglef+180,RADIUS);
 	floodfill(CENTERX-10,CENTERY,3);
-    memorysize = imagesize(280,360,360,440);
+    memorysize = imagesize(280,340,360,440);
 	bufferapartl = malloc(memorysize);
-	getimage(280,360,360,440,bufferapartl);
+	getimage(280,340,360,440,bufferapartl);
 	cleardevice();
 
 	line( CENTERX-21, CENTERY+21, CENTERX+21, CENTERY-21);
 	angles = 225;
 	arc(CENTERX, CENTERY, angles, angles-180,RADIUS);
 	floodfill(CENTERX+10,CENTERY,3);
-    memorysize = imagesize(280,360,360,440);
+    memorysize = imagesize(280,340,360,440);
 	bufferapartr = malloc(memorysize);
-	getimage(280,360,360,440,bufferapartr);
+	getimage(280,340,360,440,bufferapartr);
 	cleardevice();
 	/*This part is going to draw a rectangle whose color is backcolor.*/
-    memorysize = imagesize(280,360,360,440);
+    memorysize = imagesize(280,340,360,440);
 	bufferclear = malloc(memorysize);
-	getimage(280,360,360,440,bufferclear);
+	getimage(280,340,360,440,bufferclear);
 	cleardevice();
 
 	/*This part is about to set the amount of fruits.*/
@@ -85,46 +80,12 @@ int main()
 
 }
 
-/*
-void cursorOn()
-{
-	union REGS r;
-	struct SREGS s;
-	r.x.ax = 1;
-	msvisible = TRUE;
-	int86(0x33,&r,&r,&s);
-}
-
-void cursorOff()
-{
-	union REGS r;
-	struct SREGS s;
-	r.x.ax = 2;
-	msvisible = FALSE;
-	int86(0x33,&r,&r,&s);
-}
-
-
-void cursorSet(unsigned long x, unsigned long y);
-{
-
-	union REGS r;
-	struct SREGS s;
-	r.x.ax = 4;
-	r.x.cx = x;
-	r.x.dx = y;
-	int86(0x33,&r,&r,&s);
-	mousex = x;
-	mousey = y;
-}
-
-*/
 void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum)
 {
 	int i,j,action = 0,color,x[3][3]={330,0,0,150,450,0,130,300,460};
 	int y[2][5] = {400,400,400,400,400,1,1,1,1,1},modifier;
 	float acceleration = 0.04,accelerationup = 0.04,speedup=4,speed[5]={1,1,1,1,1};
-	j = fruitnum-1; 
+	j = fruitnum-1;
 	do{
 		if((inportb(0x3da)&0x08) != 0 && action == 0)
 		{
@@ -146,7 +107,7 @@ void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *buffer
 				for (i=0;i<=j;i++)
 				{
 					if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
-					{	
+					{
 						color= getpixel(mousex,mousey);
 						if (color == 4)
 						{
@@ -230,57 +191,6 @@ void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *buffer
 	}while(1);
 
 }
-/*
-void fruitdown(double x,double y,int speed,void *bufferdown)
-{
-	int i=x,j=y,action = 0;
-	do{
-		if((inportb(0x3da)&0x08) != 0 && action == 0)
-		{
-			putimage(i,j,bufferdown,COPY_PUT);
-			j = j + speed;
-			action = 1;
-		}
-		else
-			if((inportb(0x3da)&0x08) == 0 &&action == 1)
-			{
-				action = 0;
-			}
-		if (j==400)
-			break;
-	}while(1);
-
-}
-*/
-void fruitdownapart(double x,double y, double speed, void *bufferapartl, void *bufferapartr)
-{
-	int i=x,j=y,action = 0;
-	double acceleration = 0.04;
-	do{
-		if((inportb(0x3da)&0x08) != 0 && action == 0)
-		 {
-			putimage(i,j,bufferapartl,COPY_PUT);
-			putimage(i+100,j,bufferapartr,COPY_PUT);
-			j = j + speed;
-			speed = speed + acceleration;
-			if (speed == 6)
-				acceleration = 0;
-			if (j > 400)
-				break;
-			action = 1;
-		}
-		else
-		{
-			if((inportb(0x3da)&0x08) == 0 &&action == 1)
-			{
-				action = 0;
-			}
-		if (j > 400)
-			break;
-		}
-	}while(1);
-
-}
 
 void mouseRead()
 {
@@ -292,3 +202,4 @@ void mouseRead()
 	mousey = r2.x.dx;
 	mousekey = r2.x.bx;
 }
+
