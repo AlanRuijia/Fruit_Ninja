@@ -1,12 +1,94 @@
 #include "Fruit.h"
+int msvisible,mousex,mousey,mousekey;
+#define TRUE 1
+#define FALSE 0
+#define RED 4
 
-int main()
+int init();
+int read();
+void clrscr(void);
+void cursorOn()
 {
-	int i,graphdriver,graphmode,fruitnum,k;
+	union REGS r;
+	struct SREGS s;
+	r.x.ax=1;
+	msvisible=TRUE;
+	int86x(0x33,&r,&r,&s);
+}
+void cursorOff()
+{
+	union REGS r;
+	struct SREGS s;
+	r.x.ax=2;
+	msvisible=FALSE;
+	int86x(0x33,&r,&r,&s);
+}
+void wait(int i)
+{
+	do{
+		mouseRead();
+	}while(mousekey==i);
+}
+void cursor(),newxy();
+void main()
+{
+	int i,graphdriver,graphmode,fruitnum,k,page;
 	unsigned memorysize;
 	void *bomb,*bufferup,*bufferapartl,*bufferapartr,*bufferclear,*orange,*orangeleft,*orangeright;
 	long anglef,angles;
-	graphdriver = DETECT;
+	int buttons,xm,ym,x0,y0,x,y;
+	char str[100];
+	int driver=VGA;
+	int mode=VGAHI;
+	char s[30];
+	graphdriver=DETECT;
+	initgraph(&graphdriver,&graphmode,"C:\\TC20\\BGI");
+	cleardevice();
+	setlinestyle(0,0,3);
+	setbkcolor(10);
+	line(100,120,200,120);
+	line(100,121,200,121);
+	line(100,122,200,122);
+	putpixel(100,120,RED);
+	putpixel(101,120,RED);
+	putpixel(102,120,RED);
+	putpixel(103,120,RED);
+	setcolor(4);
+	setfillstyle(1,2);
+	setcolor(4);
+	floodfill(50,50,18);
+	setfillstyle(1,13);
+	floodfill(20,100,18);
+	setcolor(YELLOW);
+	settextstyle(1,0,6);
+	outtextxy(100,60,"Fruit Ninja");
+	setviewport(100,200,540,380,0);
+	setcolor(14);
+	setfillstyle(1,12);
+	rectangle(20,30,300,100);
+	settextstyle(3,0,6);
+	floodfill(21,100,14);
+	sprintf(s,"Start");
+	setcolor(YELLOW);
+	outtextxy(60,40,s);
+	setcolor(YELLOW);
+	settextstyle(3,0,6);
+	rectangle(20,150,300,210);
+	settextstyle(3,0,5);
+	outtextxy(60,160,"Exit");
+	setcolor(YELLOW);
+	for (; ;)
+	{
+		mouseRead();
+		if(mousex>=120&&mousex<=400&&mousey>=230&&mousey<=300&&mousekey==1)
+		{
+			clrscr();
+			cleardevice();
+			break;
+		}
+		if(mousex>=120&&mousex<=400&&mousey>=350&&mousey<=410&&mousekey==1)
+			exit(1);
+	}
 	initgraph(&graphdriver,&graphmode,"C:\\TC20\\BGI");
 	setpalette(1,1);
 	setpalette(4,4);
@@ -22,7 +104,7 @@ int main()
 	setlinestyle(0,0,3);
 	line(CENTERX,CENTERY-24,CENTERX,CENTERY-40);
 	setlinestyle(0,0,1);
-    memorysize = imagesize(280,340,360,440);
+	memorysize = imagesize(280,340,360,440);
 	bufferup = malloc(memorysize);
 	getimage(280,340,360,440,bufferup);
 	cleardevice();
@@ -39,7 +121,7 @@ int main()
 	line(CENTERX-3,CENTERY-7,CENTERX+3,CENTERY-7);
 	setlinestyle(0,0,1);
 	setcolor(FRONTCOLOR);
-    memorysize = imagesize(280,340,360,440);
+	memorysize = imagesize(280,340,360,440);
 	orange = malloc(memorysize);
 	getimage(280,340,360,440,orange);
 	cleardevice();
@@ -49,7 +131,7 @@ int main()
 	anglef = 135;
 	arc(CENTERX, CENTERY, anglef, anglef+180,RADIUS);
 	floodfill(CENTERX-10,CENTERY,FRONTCOLOR);
-    memorysize = imagesize(280,340,360,440);
+	memorysize = imagesize(280,340,360,440);
 	bufferapartl = malloc(memorysize);
 	getimage(280,340,360,440,bufferapartl);
 	cleardevice();
@@ -58,11 +140,11 @@ int main()
 	angles = 225;
 	arc(CENTERX, CENTERY, angles, angles-180,RADIUS);
 	floodfill(CENTERX+10,CENTERY,FRONTCOLOR);
-    memorysize = imagesize(280,340,360,440);
+	memorysize = imagesize(280,340,360,440);
 	bufferapartr = malloc(memorysize);
 	getimage(280,340,360,440,bufferapartr);
 	cleardevice();
-	
+
 	/*Orange apart.*/
 	setcolor(14);
 	setfillstyle(1,14);
@@ -70,7 +152,7 @@ int main()
 	anglef = 135;
 	arc(CENTERX, CENTERY, anglef, anglef+180,RADIUS);
 	floodfill(CENTERX-10,CENTERY,14);
-    memorysize = imagesize(280,340,360,440);
+	memorysize = imagesize(280,340,360,440);
 	orangeleft = malloc(memorysize);
 	getimage(280,340,360,440,orangeleft);
 	cleardevice();
@@ -79,11 +161,11 @@ int main()
 	angles = 225;
 	arc(CENTERX, CENTERY, angles, angles-180,RADIUS);
 	floodfill(CENTERX+10,CENTERY,14);
-    memorysize = imagesize(280,340,360,440);
+	memorysize = imagesize(280,340,360,440);
 	orangeright = malloc(memorysize);
 	getimage(280,340,360,440,orangeright);
 	cleardevice();
-	
+
 	/*bomb*/
 	setcolor(15);
 	setfillstyle(1,15);
@@ -95,13 +177,13 @@ int main()
 	setcolor(4);
 	line(CENTERX,CENTERY-38,CENTERX,CENTERY-40);
 	setlinestyle(0,0,1);
-    memorysize = imagesize(280,340,360,440);
+	memorysize = imagesize(280,340,360,440);
 	bomb = malloc(memorysize);
 	getimage(280,340,360,440,bomb);
 	cleardevice();
 
 	/*This part is going to draw a rectangle whose color is backcolor.*/
-    memorysize = imagesize(280,340,360,440);
+	memorysize = imagesize(280,340,360,440);
 	bufferclear = malloc(memorysize);
 	getimage(280,340,360,440,bufferclear);
 	cleardevice();
@@ -193,69 +275,69 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
 						if (speed[i] != 4)
 							speed[i] = speed[i] + acceleration;
 					}
-						if (y[0][i] > 400)
-						{
+					if (y[0][i] > 400)
+					{
 						putimage(x[j][i],y[0][i],bufferclear,COPY_PUT);
 						putimage(x[j][i]+80,y[0][i],bufferclear,COPY_PUT);
 						y[1][i] = 2;
-						}
+					}
 				}
 
-			for (i=0;y[1][i]==2 && i<fruitnum ;i++)
-				;
-			if (i == fruitnum)
-				break;
+				for (i=0;y[1][i]==2 && i<fruitnum ;i++)
+					;
+				if (i == fruitnum)
+					break;
 				action = 1;
 			}
 		}
-		
+
 		else
 		{
 			if((inportb(0x3da)&0x08) == 0 &&action == 1)
 			{
 				/*
-				for (i = 0;i<=j;i++)
-				{
-					if(y[1][i]==1)
-					{
-						putimage(x[j][i],y[0][i],bufferup,COPY_PUT);
-						y[0][i] = y[0][i] - speedup;
-					}
-				}
-				speedup = speedup - accelerationup;
-				if (speedup == 0)
-					speedup = -1;
-				if (speedup == -6)
-					acceleration = 0;
-				mouseRead();
-				for (i=0;i<=j;i++)
-				{
-					if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
-					{	
-						color= getpixel(mousex,mousey);
-						if (color == judge)
-							y[1][i] = 0;
-					}
-					if (color ==4 && mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
-					if (y[1][i]==0)
-					{	
-						putimage(x[j][i],y[0][i],bufferapartl,COPY_PUT);
-						putimage(x[j][i]+80,y[0][i],bufferapartr,COPY_PUT);
-						y[0][i] = y[0][i] + speed[i];
-						if (speed[i] != 4)
-							speed[i] = speed[i] + acceleration;
-					}
-						if (y[0][i] > 400)
-						{
-						putimage(x[j][i],y[0][i],bufferclear,COPY_PUT);
-						putimage(x[j][i]+80,y[0][i],bufferclear,COPY_PUT);
-						y[1][i] = 2;
-						}	
-				}
-			for (i=0;y[1][i]==2 && i<fruitnum ;i++)
-				;
-			if (i == fruitnum)
-				break;*/
+				   for (i = 0;i<=j;i++)
+				   {
+				   if(y[1][i]==1)
+				   {
+				   putimage(x[j][i],y[0][i],bufferup,COPY_PUT);
+				   y[0][i] = y[0][i] - speedup;
+				   }
+				   }
+				   speedup = speedup - accelerationup;
+				   if (speedup == 0)
+				   speedup = -1;
+				   if (speedup == -6)
+				   acceleration = 0;
+				   mouseRead();
+				   for (i=0;i<=j;i++)
+				   {
+				   if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
+				   {	
+				   color= getpixel(mousex,mousey);
+				   if (color == judge)
+				   y[1][i] = 0;
+				   }
+				   if (color ==4 && mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
+				   if (y[1][i]==0)
+				   {	
+				   putimage(x[j][i],y[0][i],bufferapartl,COPY_PUT);
+				   putimage(x[j][i]+80,y[0][i],bufferapartr,COPY_PUT);
+				   y[0][i] = y[0][i] + speed[i];
+				   if (speed[i] != 4)
+				   speed[i] = speed[i] + acceleration;
+				   }
+				   if (y[0][i] > 400)
+				   {
+				   putimage(x[j][i],y[0][i],bufferclear,COPY_PUT);
+				   putimage(x[j][i]+80,y[0][i],bufferclear,COPY_PUT);
+				   y[1][i] = 2;
+				   }	
+				   }
+				   for (i=0;y[1][i]==2 && i<fruitnum ;i++)
+				   ;
+				   if (i == fruitnum)
+				   break;*/
 				action = 0;
 			}
 		}
@@ -278,7 +360,7 @@ void clearscreen()
 {
 	setfillstyle(SOLID_FILL,BROWN);
 	bar(150,60,480,90);
-    
+
 }
 
 /********************************************************** 
