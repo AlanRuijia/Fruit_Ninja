@@ -38,8 +38,6 @@ void main()
 	long anglef,angles;
 	int buttons,xm,ym,x0,y0,x,y;
 	char str[100];
-	int driver=VGA;
-	int mode=VGAHI;
 	char s[30];
 	graphdriver=DETECT;
 	initgraph(&graphdriver,&graphmode,"C:\\TC20\\BGI");
@@ -246,6 +244,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
 					{
 						putimage(x[j][i],y[0][i],bufferup,COPY_PUT);
 						y[0][i] = y[0][i] - speedup;
+						x[i][j] = x[i][j] +1;
 					}
 				}
 				speedup = speedup - accelerationup;
@@ -275,7 +274,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
 						if (speed[i] != 4)
 							speed[i] = speed[i] + acceleration;
 					}
-					if (y[0][i] > 400)
+					if (y[0][i] > 400 || x[i][j] >= 600 || x[i][j] <= 30)
 					{
 						putimage(x[j][i],y[0][i],bufferclear,COPY_PUT);
 						putimage(x[j][i]+80,y[0][i],bufferclear,COPY_PUT);
@@ -295,50 +294,57 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
 		{
 			if((inportb(0x3da)&0x08) == 0 &&action == 1)
 			{
-				/*
-				   for (i = 0;i<=j;i++)
-				   {
-				   if(y[1][i]==1)
-				   {
-				   putimage(x[j][i],y[0][i],bufferup,COPY_PUT);
-				   y[0][i] = y[0][i] - speedup;
-				   }
-				   }
-				   speedup = speedup - accelerationup;
-				   if (speedup == 0)
-				   speedup = -1;
-				   if (speedup == -6)
-				   acceleration = 0;
-				   mouseRead();
-				   for (i=0;i<=j;i++)
-				   {
-				   if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
-				   {	
-				   color= getpixel(mousex,mousey);
-				   if (color == judge)
-				   y[1][i] = 0;
-				   }
-				   if (color ==4 && mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
-				   if (y[1][i]==0)
-				   {	
-				   putimage(x[j][i],y[0][i],bufferapartl,COPY_PUT);
-				   putimage(x[j][i]+80,y[0][i],bufferapartr,COPY_PUT);
-				   y[0][i] = y[0][i] + speed[i];
-				   if (speed[i] != 4)
-				   speed[i] = speed[i] + acceleration;
-				   }
-				   if (y[0][i] > 400)
-				   {
-				   putimage(x[j][i],y[0][i],bufferclear,COPY_PUT);
-				   putimage(x[j][i]+80,y[0][i],bufferclear,COPY_PUT);
-				   y[1][i] = 2;
-				   }	
-				   }
-				   for (i=0;y[1][i]==2 && i<fruitnum ;i++)
-				   ;
-				   if (i == fruitnum)
-				   break;*/
-				action = 0;
+				{
+					for (i = 0;i<=j;i++)
+					{
+						if(y[1][i]==1)
+						{
+							putimage(x[j][i],y[0][i],bufferup,COPY_PUT);
+							y[0][i] = y[0][i] - speedup;
+							x[i][j] = x[i][j] +1;
+						}
+					}
+					speedup = speedup - accelerationup;
+					if (speedup == 0)
+						speedup = -1;
+					if (speedup == -6)
+						acceleration = 0;
+					mouseRead();
+					for (i=0;i<=j;i++)
+					{
+						if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
+						{
+							color= getpixel(mousex,mousey);
+							if (color == judge && judge != 15)
+							{
+								y[1][i] = 0;
+								count++;
+							}
+							if (color == judge && judge == 15)
+								return 1;
+						}
+						if (y[1][i]==0)
+						{	
+							putimage(x[j][i],y[0][i],bufferapartl,COPY_PUT);
+							putimage(x[j][i]+80,y[0][i],bufferapartr,COPY_PUT);
+							y[0][i] = y[0][i] + speed[i];
+							if (speed[i] != 4)
+								speed[i] = speed[i] + acceleration;
+						}
+						if (y[0][i] > 400 || x[i][j] >= 600 || x[i][j] <= 30)
+						{
+							putimage(x[j][i],y[0][i],bufferclear,COPY_PUT);
+							putimage(x[j][i]+80,y[0][i],bufferclear,COPY_PUT);
+							y[1][i] = 2;
+						}
+					}
+
+					for (i=0;y[1][i]==2 && i<fruitnum ;i++)
+						;
+					if (i == fruitnum)
+						break;
+					action = 0;
+				}
 			}
 		}
 	}while(1);
