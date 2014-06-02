@@ -1,4 +1,4 @@
-#include "FruitNinja.h"
+#include "FRUIT.H"
 
 int main()
 {
@@ -49,10 +49,14 @@ int main()
 	bufferclear = malloc(memorysize);
 	getimage(280,340,360,440,bufferclear);
 	cleardevice();
-
+	/*setfillstyle(SOLID_FILL,BROWN);*/
+	/*bar(500,10,630,50);*/
+	clearscreen();
+	outch();
+	outb();
 	/*This part is about to set the amount of fruits.*/
 	randomize();
-	for (num=0;num<5;num++)
+	for (num=0;num<1;num++)
 	{
 		fruitnum =1 + random(3);
 		/*Next part is about to move the fruit.*/
@@ -62,7 +66,6 @@ int main()
 	free(bufferapartl);
 	free(bufferapartr);
 	free(bufferclear);
-
 }
 
 void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum)
@@ -190,8 +193,15 @@ void mouseRead()
 
 void clearscreen()
 {
-	setfillstyle(SOLID_FILL,BROWN);
-	bar(150,60,480,90);
+	setfillstyle(SOLID_FILL,GREEN);
+	bar(500,10,630,50);
+    
+}
+
+void clearscreenx()
+{
+	setfillstyle(SOLID_FILL,GREEN);
+	bar(500,10,630,30);
     
 }
 
@@ -201,15 +211,16 @@ void clearscreen()
  *  返 回 值：无                            	*
  *  函数功能：在信息显示框中输出sum的值	*
  **********************************************************/
-void outch() 
+void outch()
 {
-	int i=0,m=0,j=0,fig;
+	int i=0,fig;
 	char FIG[8];
 	char temp[2]="";
 	long int xu;
 	xu = count * 100;
-	clearscreen();
-	outtextxy(OUTX-10,OUTY,"当前得分：");
+	clearscreenx();
+	settextstyle(1, 0, 1);
+	outtextxy(OUTX,OUTY,"Score:");
 	while(xu!=0)
 	{
 		FIG[i++]=xu%10+'0';
@@ -218,7 +229,27 @@ void outch()
 	for(fig=0;fig<i;fig++)
 	{
 		temp[0]=FIG[fig];
-		outtextxy(OUTX-15*(fig+1),OUTY,temp);
+		settextstyle(1, 0, 1);
+		outtextxy(OUTX+60+15*(i-fig),OUTY,temp);
 	}
 }
-
+
+void outb()
+{
+	FILE *fp;
+	int i=0,fig;
+	char FIG[8];
+	char temp[2]="";
+	fp = fopen("BEST.TXT", "r");
+	fgets(FIG, 10, fp);
+	fclose(fp);
+	settextstyle(1, 0, 1);
+	outtextxy(OUTX,OUTY+23,"Best:");
+	i = strlen(FIG);
+	for(fig=0;fig<i;fig++)
+	{
+		temp[0]=FIG[fig];
+		settextstyle(1, 0, 1);
+		outtextxy(OUTX+75+15*(fig-1),OUTY+23,temp);
+	}
+}

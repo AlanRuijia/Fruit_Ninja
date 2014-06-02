@@ -6,15 +6,20 @@
 #include <conio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 #define PI 3.14159265
 #define CENTERX 320
 #define CENTERY 400
 #define RADIUS  30
 #define BACKCOLOR 1
 #define FRONTCOLOR 6
-int count;
+#define OUTX   503
+#define OUTY   8
+int count = 7;
 int mousex,mousey,mousekey;
 void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum);
 void mouseRead();
-#define OUTX   455            /* 信息显示框的右边显示起始x坐标 */
-#define OUTY   68             /* 信息显示框的右边显示起始y坐标 */
+void clearscreen();
+void clearscreenx();
+void outch();
+void outb();
