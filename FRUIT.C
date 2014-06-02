@@ -45,6 +45,7 @@ void main()
         settextstyle(3,0,5);
         outtextxy(60,160,"Exit");
         setcolor(YELLOW);
+        cursorOn();
         for (; ;)
         {
                 mouseRead();
@@ -156,13 +157,14 @@ void main()
         getimage(280,340,360,440,bufferclear);
         cleardevice();
 
-        /*This part is about to design the score board.*/
-        clearscreen();
-        outch();
-        outb();
+        /*This part is about to init the score board.*/
+        initboard();
+        outscore();
+        outbest();
 
         /*This part is about to set the amount of fruits.*/
         randomize();
+        cursorOn();
         for (;;)
         {
                 fruitnum =1 + random(3);
@@ -177,9 +179,18 @@ void main()
                 if (k == 1)
                 {
                         cleardevice();
+                        /*
+                        if (newrecord())
+                        {
+                        		setcolor(3);
+                        		settextstyle(1,0,6);
+                        		outtextxy(200,200,"Cong! New record!");	
+                        }
+                        */
+                        newrecord();
                         setcolor(4);
                         settextstyle(1,0,6);
-                        outtextxy(200,200,"You Lose!");		
+                        outtextxy(200,200,"You Lose!");	
                         break;
                 }
         }
@@ -237,7 +248,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
                                                 {
                                                         y[1][i] = 0;
                                                         count++;
-														outch();
+														outscore();
                                                 }
                                                 if (color == judge && judge == 15)
                                                         return 1;
@@ -268,12 +279,12 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
 
                 else
                 {
-                        if((inportb(0x3da)&0x08) == 0 &&action == 1)
+                        if ((inportb(0x3da)&0x08) == 0 &&action == 1)
                         {
                                 {
                                         for (i = 0;i<=j;i++)
                                         {
-                                                if(y[1][i]==1)
+                                                if (y[1][i]==1)
                                                 {
                                                         putimage(x[j][i],y[0][i],bufferup,COPY_PUT);
                                                         y[0][i] = y[0][i] - speedup;
@@ -295,7 +306,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
                                                         {
                                                                 y[1][i] = 0;
                                                                 count++;
-																outch();
+																outscore();
                                                         }
                                                         if (color == judge && judge == 15)
                                                                 return 1;
@@ -324,7 +335,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
                                 }
                         }
                 }
-        }while(1);
+        } while (1);
 
 }
 
@@ -350,47 +361,59 @@ void cursorOn()
 
 void wait(int i)
 {
-    do{
+    do {
         mouseRead();
-    }while(mousekey==i);
+    } while (mousekey==i);
 }
 
+/*****************************************************
+ *  函数原型：void initboard()   					 *
+ *  传入参数：无                                	 *
+ *  返 回 值：无                                     *
+ *  函数功能：初始化计分板							 *
+ *****************************************************/
+void initboard()
+{
+        setfillstyle(SOLID_FILL,GREEN);
+        bar(500,10,635,50);
+
+}
+
+/*****************************************************
+ *  函数原型：void clearscreen()   				 *
+ *  传入参数：无                                	 *
+ *  返 回 值：无                                     *
+ *  函数功能：清空刷新计分板						 *
+ *****************************************************/
 void clearscreen()
 {
         setfillstyle(SOLID_FILL,GREEN);
-        bar(500,10,630,50);
+        bar(500,10,635,30);
 
 }
 
-void clearscreenx()
-{
-        setfillstyle(SOLID_FILL,GREEN);
-        bar(500,10,630,30);
-
-}
-
-/********************************************************
- *  函数原型：void outch(double sum)    *
- *  传入参数：sum-待输出的双精度浮点数                                  *
- *  返 回 值：无                                *
- *  函数功能：在信息显示框中输出sum的值 *
- **********************************************************/
-void outch()
+/*****************************************************
+ *  函数原型：void outscore()   					 *
+ *  传入参数：无                                	 *
+ *  返 回 值：无                                     *
+ *  函数功能：输出当前得分							 *
+ *****************************************************/
+void outscore()
 {
         int i=0,fig;
         char FIG[8];
         char temp[2]="";
         long int xu;
         xu = count * 100;
-        clearscreenx();
+        clearscreen();
         settextstyle(1, 0, 1);
         outtextxy(OUTX,OUTY,"Score:");
-        while(xu!=0)
+        while (xu!=0)
         {
                 FIG[i++]=xu%10+'0';
                 xu=floor(xu/10);
         }
-        for(fig=0;fig<i;fig++)
+        for (fig=0;fig<i;fig++)
         {
                 temp[0]=FIG[fig];
                 settextstyle(1, 0, 1);
@@ -398,7 +421,13 @@ void outch()
         }
 }
 
-void outb()
+/*****************************************************
+ *  函数原型：void outscore()   					 *
+ *  传入参数：无                                	 *
+ *  返 回 值：无                                     *
+ *  函数功能：输出最高得分							 *
+ *****************************************************/
+void outbest()
 {
         FILE *fp;
         int i=0,fig;
@@ -408,12 +437,66 @@ void outb()
         fgets(FIG, 10, fp);
         fclose(fp);
         settextstyle(1, 0, 1);
-        outtextxy(OUTX,OUTY+23,"Best:");
+        outtextxy(OUTX,OUTY+20,"Best :");
         i = strlen(FIG);
-        for(fig=0;fig<i;fig++)
+        for (fig=0;fig<i;fig++)
         {
                 temp[0]=FIG[fig];
                 settextstyle(1, 0, 1);
-                outtextxy(OUTX+75+15*(fig-1),OUTY+23,temp);
+                outtextxy(OUTX+75+15*(fig),OUTY+20,temp);
         }
+}
+
+/*****************************************************
+ *  函数原型：int newrecord()   					 *
+ *  传入参数：无                                	 *
+ *  返 回 值：若破纪录返回1，未破纪录则返回0         *
+ *  函数功能：输出最高得分							 *
+ *****************************************************/
+
+ /* 在游戏结束时调用.如果破纪录则返回1，未破纪录返回0，该注释写完即可删除 */
+int newrecord()
+{
+		FILE *fp;
+		int num = 0;
+		int i, j;
+		char FIG[8];
+		int tmp = 1;
+		char newbest[8];
+		int flag = FALSE;
+		fp = fopen("BEST.TXT", "r+");
+        fgets(FIG, 10, fp);
+        fclose(fp);
+        for (i = 0; i < strlen(FIG); ++i)
+        {
+        		num = num*10 + (FIG[i]-'0');
+        }
+        
+		if (num < count*100)
+		{
+				flag = TRUE;
+				fp = fopen("BEST.TXT", "w");
+				/* convert number to string */
+				for (i = 0; ; ++i)
+				{
+						if(!(count/tmp))
+						{
+								break;
+						}
+						tmp *= 10;
+				}
+				for (j = i-1; j >= 0; --j)
+				{
+					newbest[j] = count%10+'0';
+                	count /= 10;
+				}
+				newbest[i] = '0';
+				newbest[i+1] = '0';
+				newbest[i+2] = '\0';
+
+				/* write into the file */
+				fputs(newbest, fp);
+				fclose(fp);
+		}
+		return flag;
 }

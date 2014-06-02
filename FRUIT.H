@@ -14,7 +14,7 @@
 #define BACKCOLOR 1
 #define FRONTCOLOR 6
 #define OUTX   503
-#define OUTY   8
+#define OUTY   15
 #define TRUE   1
 #define FALSE  0
 int count;
@@ -27,8 +27,9 @@ void clrscr(void);
 void cursor(),newxy();
 void cursorOn();
 void mouseRead();
-void clearscreen();
-void clearscreenx();
-void outch();
-void outb();
 void wait(int i);
+void initboard();
+void clearscreen();
+void outscore();
+void outbest();
+int newrecord();
