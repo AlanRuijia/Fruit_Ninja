@@ -15,11 +15,20 @@
 #define FRONTCOLOR 6
 #define OUTX   503
 #define OUTY   8
-int count = 7;
-int mousex,mousey,mousekey;
-void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum);
+#define TRUE   1
+#define FALSE  0
+int count;
+int colorstyle;
+int msvisible,mousex,mousey,mousekey;
+int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum);
+int init();
+int read();
+void clrscr(void);
+void cursor(),newxy();
+void cursorOn();
 void mouseRead();
 void clearscreen();
 void clearscreenx();
 void outch();
 void outb();
+void wait(int i);
