@@ -1,4 +1,5 @@
-#include "Fruit_Ninja"
+#include "FruitNinja.h"
+
 int main()
 {
 	int i,graphdriver,graphmode,fruitnum,num;
@@ -207,7 +208,7 @@ void outch()
 	char temp[2]="";
 	long int xu;
 	xu = count * 100;
-	clearscreen()
+	clearscreen();
 	outtextxy(OUTX-10,OUTY,"当前得分：");
 	while(xu!=0)
 	{
@@ -220,3 +221,4 @@ void outch()
 		outtextxy(OUTX-15*(fig+1),OUTY,temp);
 	}
 }
+
