@@ -2,9 +2,9 @@
 
 int main()
 {
-	int i,graphdriver,graphmode,fruitnum,num;
+	int i,graphdriver,graphmode,fruitnum,k;
 	unsigned memorysize;
-	void *bufferup,*bufferapartl,*bufferapartr,*bufferclear,*orange;
+	void *bomb,*bufferup,*bufferapartl,*bufferapartr,*bufferclear,*orange,*orangeleft,*orangeright;
 	long anglef,angles;
 	graphdriver = DETECT;
 	initgraph(&graphdriver,&graphmode,"C:\\TC20\\BGI");
@@ -62,6 +62,44 @@ int main()
 	bufferapartr = malloc(memorysize);
 	getimage(280,340,360,440,bufferapartr);
 	cleardevice();
+	
+	/*Orange apart.*/
+	setcolor(14);
+	setfillstyle(1,14);
+	line( CENTERX+21, CENTERY+21, CENTERX-21, CENTERY-21);
+	anglef = 135;
+	arc(CENTERX, CENTERY, anglef, anglef+180,RADIUS);
+	floodfill(CENTERX-10,CENTERY,14);
+    memorysize = imagesize(280,340,360,440);
+	orangeleft = malloc(memorysize);
+	getimage(280,340,360,440,orangeleft);
+	cleardevice();
+
+	line( CENTERX-21, CENTERY+21, CENTERX+21, CENTERY-21);
+	angles = 225;
+	arc(CENTERX, CENTERY, angles, angles-180,RADIUS);
+	floodfill(CENTERX+10,CENTERY,14);
+    memorysize = imagesize(280,340,360,440);
+	orangeright = malloc(memorysize);
+	getimage(280,340,360,440,orangeright);
+	cleardevice();
+	
+	/*bomb*/
+	setcolor(15);
+	setfillstyle(1,15);
+	circle(CENTERX,CENTERY,RADIUS);
+	floodfill(CENTERX,CENTERY,15);
+	setcolor(FRONTCOLOR);
+	setlinestyle(0,0,3);
+	line(CENTERX,CENTERY-24,CENTERX,CENTERY-40);
+	setcolor(4);
+	line(CENTERX,CENTERY-38,CENTERX,CENTERY-40);
+	setlinestyle(0,0,1);
+    memorysize = imagesize(280,340,360,440);
+	bomb = malloc(memorysize);
+	getimage(280,340,360,440,bomb);
+	cleardevice();
+
 	/*This part is going to draw a rectangle whose color is backcolor.*/
     memorysize = imagesize(280,340,360,440);
 	bufferclear = malloc(memorysize);
@@ -70,32 +108,52 @@ int main()
 
 	/*This part is about to set the amount of fruits.*/
 	randomize();
-	for (num=0;num<2;num++)
+	for (;;)
 	{
 		fruitnum =1 + random(3);
 		/*Next part is about to move the fruit.*/
-		colorstyle = 0;
-		fruitup(bufferup,bufferapartl,bufferapartr,bufferclear,fruitnum);
-		colorstyle = 1;
-		fruitup(orange,bufferapartl,bufferapartr,bufferclear,fruitnum);
+		colorstyle =random(3);
+		if (colorstyle == 0)
+			k = fruitup(bufferup,bufferapartl,bufferapartr,bufferclear,fruitnum);
+		if (colorstyle == 1)
+			k = fruitup(orange,orangeleft,orangeright,bufferclear,fruitnum);
+		if (colorstyle == 2)
+			k = fruitup(bomb,orangeleft,orangeright,bufferclear,fruitnum);
+		if (k == 1)
+		{
+			cleardevice();
+			setcolor(4);
+			settextstyle(1,0,6);
+			outtextxy(200,200,"You Lose!");		
+			break;
+		}
 	}
+
 	free(bufferup);
 	free(bufferapartl);
 	free(bufferapartr);
 	free(bufferclear);
-
+	free(orange);
+	free(orangeleft);
+	free(orangeright);
+	free(bomb);
 }
 
-void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum)
+int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum)
 {
 	int i,j,action = 0,color,x[3][3]={330,0,0,150,450,0,130,300,460};
 	int y[2][5] = {400,400,400,400,400,1,1,1,1,1},modifier,judge;
 	float acceleration = 0.04,accelerationup = 0.04,speedup=4,speed[5]={1,1,1,1,1};
-	j = fruitnum-1;
 	if (colorstyle == 0)
 		judge = 4;
 	if (colorstyle == 1)
 		judge = 14;
+	if (colorstyle == 2)
+	{
+		judge = 15;
+		fruitnum = 1;
+	}
+	j = fruitnum-1;
 	do{
 		if((inportb(0x3da)&0x08) != 0 && action == 0)
 		{
@@ -119,11 +177,13 @@ void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *buffer
 					if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
 					{
 						color= getpixel(mousex,mousey);
-						if (color == judge)
+						if (color == judge && judge != 15)
 						{
 							y[1][i] = 0;
 							count++;
 						}
+						if (color == judge && judge == 15)
+							return 1;
 					}
 					if (y[1][i]==0)
 					{	
@@ -153,6 +213,7 @@ void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *buffer
 		{
 			if((inportb(0x3da)&0x08) == 0 &&action == 1)
 			{
+				/*
 				for (i = 0;i<=j;i++)
 				{
 					if(y[1][i]==1)
@@ -194,7 +255,7 @@ void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *buffer
 			for (i=0;y[1][i]==2 && i<fruitnum ;i++)
 				;
 			if (i == fruitnum)
-				break;
+				break;*/
 				action = 0;
 			}
 		}

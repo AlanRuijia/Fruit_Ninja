@@ -15,7 +15,7 @@
 int count;
 int colorstyle;
 int mousex,mousey,mousekey;
-void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum);
+int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum);
 void mouseRead();
 #define OUTX   455            /* 信息显示框的右边显示起始x坐标 */
 #define OUTY   68             /* 信息显示框的右边显示起始y坐标 */
