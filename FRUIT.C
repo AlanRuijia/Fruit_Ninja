@@ -1,10 +1,10 @@
-#include "FruitNinja.h"
+#include "Fruit.h"
 
 int main()
 {
 	int i,graphdriver,graphmode,fruitnum,num;
 	unsigned memorysize;
-	void *bufferup,*bufferapartl,*bufferapartr,*bufferclear;
+	void *bufferup,*bufferapartl,*bufferapartr,*bufferclear,*orange;
 	long anglef,angles;
 	graphdriver = DETECT;
 	initgraph(&graphdriver,&graphmode,"C:\\TC20\\BGI");
@@ -26,6 +26,24 @@ int main()
 	bufferup = malloc(memorysize);
 	getimage(280,340,360,440,bufferup);
 	cleardevice();
+
+	/*The next part is about to draw an orange.*/
+	setcolor(14);
+	circle(CENTERX,CENTERY,RADIUS);
+	setfillstyle(1,14);
+	floodfill(CENTERX,CENTERY,14);  
+	setlinestyle(0,0,3);
+	setcolor(2);
+	setfillstyle(1,4);
+	line(CENTERX,CENTERY-4,CENTERX,CENTERY-10);
+	line(CENTERX-3,CENTERY-7,CENTERX+3,CENTERY-7);
+	setlinestyle(0,0,1);
+	setcolor(FRONTCOLOR);
+    memorysize = imagesize(280,340,360,440);
+	orange = malloc(memorysize);
+	getimage(280,340,360,440,orange);
+	cleardevice();
+
 	/*Next part is about to draw a fruit which is splitted. */
 	line( CENTERX+21, CENTERY+21, CENTERX-21, CENTERY-21);
 	anglef = 135;
@@ -52,11 +70,14 @@ int main()
 
 	/*This part is about to set the amount of fruits.*/
 	randomize();
-	for (num=0;num<5;num++)
+	for (num=0;num<2;num++)
 	{
 		fruitnum =1 + random(3);
 		/*Next part is about to move the fruit.*/
+		colorstyle = 0;
 		fruitup(bufferup,bufferapartl,bufferapartr,bufferclear,fruitnum);
+		colorstyle = 1;
+		fruitup(orange,bufferapartl,bufferapartr,bufferclear,fruitnum);
 	}
 	free(bufferup);
 	free(bufferapartl);
@@ -68,9 +89,13 @@ int main()
 void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferclear, int fruitnum)
 {
 	int i,j,action = 0,color,x[3][3]={330,0,0,150,450,0,130,300,460};
-	int y[2][5] = {400,400,400,400,400,1,1,1,1,1},modifier;
+	int y[2][5] = {400,400,400,400,400,1,1,1,1,1},modifier,judge;
 	float acceleration = 0.04,accelerationup = 0.04,speedup=4,speed[5]={1,1,1,1,1};
 	j = fruitnum-1;
+	if (colorstyle == 0)
+		judge = 4;
+	if (colorstyle == 1)
+		judge = 14;
 	do{
 		if((inportb(0x3da)&0x08) != 0 && action == 0)
 		{
@@ -94,7 +119,7 @@ void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *buffer
 					if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
 					{
 						color= getpixel(mousex,mousey);
-						if (color == 4)
+						if (color == judge)
 						{
 							y[1][i] = 0;
 							count++;
@@ -147,7 +172,7 @@ void fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *buffer
 					if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
 					{	
 						color= getpixel(mousex,mousey);
-						if (color == 4)
+						if (color == judge)
 							y[1][i] = 0;
 					}
 					if (color ==4 && mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
@@ -221,4 +246,3 @@ void outch()
 		outtextxy(OUTX-15*(fig+1),OUTY,temp);
 	}
 }
-
