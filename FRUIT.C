@@ -241,7 +241,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
                                 mouseRead();
                                 for (i=0;i<=j;i++)
                                 {
-                                        if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
+                                        if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30 && y[1][i] == 1)
                                         {
                                                 color= getpixel(mousex,mousey);
                                                 if (color == judge && judge != 15)
@@ -299,7 +299,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
                                         mouseRead();
                                         for (i=0;i<=j;i++)
                                         {
-                                                if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30)
+                                                if (mousekey ==1 && mousex>x[j][i]-30 && mousex<x[j][i]+30 && y[1][i] == 1)
                                                 {
                                                         color= getpixel(mousex,mousey);
                                                         if (color == judge && judge != 15)
