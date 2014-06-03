@@ -223,7 +223,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
 	direction = random(2);
 	if (direction == 0)
 		direction = -1; 
-	for (j = 0; j<=i;j++)
+	for (j = 0; j<=i; j++)
 	{
 		modifier = random(10)*direction;
 		x[i][j] = x[i][j] + modifier;
@@ -232,7 +232,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
 		if((inportb(0x3da)&0x08) != 0 && action == 0)
 		{
 			{
-				for (j = 0;j<=i;j++)
+				for (j=0; j<=i; j++)
 				{
 					if(y[1][j]==1)
 					{
