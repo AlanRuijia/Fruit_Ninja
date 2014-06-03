@@ -98,4 +98,3 @@ if(mousex>=120&&mousex<=400&&mousey>=350&&mousey<=410&&mousekey==1)
 exit(1);
 }
 }
-

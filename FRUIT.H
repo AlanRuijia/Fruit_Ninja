@@ -17,6 +17,9 @@
 #define OUTY   15
 #define TRUE   1
 #define FALSE  0
+#define STARTX 300
+#define STARTY 300
+#define SIZEY  100
 int count;
 int colorstyle;
 int msvisible,mousex,mousey,mousekey;
