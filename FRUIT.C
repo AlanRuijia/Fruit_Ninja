@@ -375,7 +375,7 @@ void wait(int i)
 void initboard()
 {
         setfillstyle(SOLID_FILL,GREEN);
-        bar(500,10,635,50);
+        bar(500,10,635,47);
 
 }
 
