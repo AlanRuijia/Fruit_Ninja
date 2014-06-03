@@ -222,7 +222,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
 	i = fruitnum-1;
 	direction = random(2);
 	if (direction == 0)
-		direction = -1; 
+		direction = -1;
 	for (j = 0; j<=i; j++)
 	{
 		modifier = random(10)*direction;
@@ -294,7 +294,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
 					{
 						if(y[1][j]==1)
 						{
-							putimage(x[i][j],y[0][j],bufferup,COPY_PUT);
+							putimage(x[j][i],y[0][j],bufferup,COPY_PUT);
 							y[0][j] = y[0][j] - speedup;
 							x[i][j] = x[i][j] + direction;
 						}
@@ -522,4 +522,3 @@ int newrecord()
 	}
 	return flag;
 }
-
