@@ -417,7 +417,14 @@ void outscore()
         {
                 temp[0]=FIG[fig];
                 settextstyle(1, 0, 1);
-                outtextxy(OUTX+60+15*(i-fig),OUTY,temp);
+                if (i == 5)
+                {
+                		outtextxy(OUTX+45+15*(i-fig),OUTY,temp);
+                } else if (i == 4){
+                		outtextxy(OUTX+60+15*(i-fig),OUTY,temp);
+                } else {
+                		outtextxy(OUTX+75+15*(i-fig),OUTY,temp);
+                }
         }
 }
 
@@ -443,7 +450,14 @@ void outbest()
         {
                 temp[0]=FIG[fig];
                 settextstyle(1, 0, 1);
-                outtextxy(OUTX+75+15*(fig),OUTY+20,temp);
+                if (i == 5)
+                {
+                		outtextxy(OUTX+60+15*(fig),OUTY+20,temp);
+                } else if (i == 4){
+                		outtextxy(OUTX+75+15*(fig),OUTY+20,temp);
+                } else {
+                		outtextxy(OUTX+90+15*(fig),OUTY+20,temp);
+                }
         }
 }
 
