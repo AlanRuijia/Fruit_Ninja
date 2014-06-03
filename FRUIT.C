@@ -220,7 +220,7 @@ int fruitup(void *bufferup,void *bufferapartl, void *bufferapartr, void *bufferc
 		fruitnum = 1;
 	}
 	i = fruitnum-1;
-	dirction = random(2);
+	direction = random(2);
 	if (direction == 0)
 		direction = -1; 
 	for (j = 0; j<=i;j++)
@@ -522,3 +522,4 @@ int newrecord()
 	}
 	return flag;
 }
+
