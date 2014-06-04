@@ -1,5 +1,6 @@
 #include "Fruit.h"
 #include "TIME.C"
+#include "MUSIC.C"
 void main()
 {
     int i,graphdriver,graphmode,fruitnum,k,page;
@@ -162,7 +163,10 @@ void main()
     initboard();
     outscore();
     outbest();
-    setTimer(newtimer());
+
+    /*This part is about to init the music and time controller.*/
+    musicon();	      
+	setTimer(newtimer);
 
     /*This part is about to set the amount of fruits.*/
     randomize();
@@ -196,19 +200,18 @@ void main()
         if (k == 1)
         {
             cleardevice();
-            /*
             if (newrecord())
             {
         		setcolor(3);
         		settextstyle(1,0,6);
         		outtextxy(200,200,"Cong! New record!");	
+            } else
+            {
+            	setcolor(4);
+            	settextstyle(1,0,6);
+            	outtextxy(200,200,"You Lose!");	
             }
-            */
-            newrecord();
-            setcolor(4);
-            settextstyle(1,0,6);
-            outtextxy(200,200,"You Lose!");	
-            break;
+			break;
     	}
     }
 

@@ -7,6 +7,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #define PI 3.14159265
 #define CENTERX 320
 #define CENTERY 400
@@ -17,9 +18,9 @@
 #define OUTY   15
 #define TRUE   1
 #define FALSE  0
-#define STARTX 300
-#define STARTY 300
-#define SIZEY  100
+#define STARTX 10
+#define STARTY 60
+#define SIZEY  20
 int count;
 int colorstyle;
 int msvisible,mousex,mousey,mousekey;

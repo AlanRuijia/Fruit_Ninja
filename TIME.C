@@ -9,7 +9,7 @@
 #define TIMER 0x1c /* 时钟中断的中断号 */
 
 unsigned int TimerCounter =0;
-int newtime= 40;
+int newtime= 60;
 int mark=0;
 
 /*定时器时间控制显示函数*/ 
@@ -76,16 +76,19 @@ void dispTime()
 
 	sprintf(buf, "Time left: %c%c%c", 1, 1, 1);
 	setcolor(BLACK);
+	settextstyle(1, 0, 3);
 	outtextxy(STARTX, STARTY-SIZEY-20, buf);
 
 	sprintf(buf, "Time left: %c%c%c", 2, 2, 2);
 	setcolor(BLACK);
+	settextstyle(1, 0, 3);
 	outtextxy(STARTX, STARTY-SIZEY-20, buf);
 
 	newtime--;
 
 	sprintf(buf, "Time left: %3d", newtime);
 	setcolor(WHITE);
+	settextstyle(1, 0, 3);
 	outtextxy(STARTX, STARTY-SIZEY-20, buf);
 
 	if(0==newtime)
